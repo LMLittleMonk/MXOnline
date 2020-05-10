@@ -176,7 +176,7 @@ class WidgetDataError(Exception):
 
 class BaseWidget(forms.Form):
 
-    template = 'xadmin/widgets/base.html'
+    template = 'xadmin/widgets/orglist.html'
     description = 'Base Widget, don\'t use it.'
     widget_title = None
     widget_icon = 'fa fa-plus-square'

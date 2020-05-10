@@ -46,7 +46,7 @@ class Migration(migrations.Migration):
                 ('add_time', models.DateTimeField(default=datetime.datetime.now, verbose_name='添加时间')),
                 ('name', models.CharField(max_length=100, verbose_name='章节名')),
                 ('learn_times', models.IntegerField(default=0, verbose_name='学习时长（分钟数）')),
-                ('course', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='courses.Course', verbose_name='课程')),
+                ('course', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='apps.courses.Course', verbose_name='课程')),
             ],
             options={
                 'verbose_name': '课程章节',
@@ -61,7 +61,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=100, verbose_name='视频名')),
                 ('learn_times', models.IntegerField(default=0, verbose_name='学习时长（分钟数）')),
                 ('url', models.CharField(max_length=1000, verbose_name='访问地址')),
-                ('lesson', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='courses.Lesson', verbose_name='章节')),
+                ('lesson', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='apps.courses.Lesson', verbose_name='章节')),
             ],
             options={
                 'verbose_name': '视频',
@@ -75,7 +75,7 @@ class Migration(migrations.Migration):
                 ('add_time', models.DateTimeField(default=datetime.datetime.now, verbose_name='添加时间')),
                 ('name', models.CharField(max_length=100, verbose_name='名称')),
                 ('file', models.FileField(max_length=200, upload_to='courses/resourse%Y/%m', verbose_name='下载地址')),
-                ('course', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='courses.Course', verbose_name='课程')),
+                ('course', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='apps.courses.Course', verbose_name='课程')),
             ],
             options={
                 'verbose_name': '课程资源',

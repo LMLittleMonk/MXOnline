@@ -16,13 +16,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 import xadmin
-from apps.users import views
 from django.views.generic import TemplateView
 from apps.users.views import LoginView
+from apps.organizations.views import OrgView
+from django.conf.urls import url
+from django.views.static import serve
+from MXOnline.settings import MEDIA_ROOT
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('xadmin/', xadmin.site.urls),
     # path('',views.index ),
     path('',TemplateView.as_view(template_name='index.html'),name = 'index'),
-    path('login/',LoginView.as_view(),name = 'login')
+    path('login/',LoginView.as_view(), name = 'login'),
+    path('orglist/',OrgView.as_view(), name = 'org_list'),
+    url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
 ]

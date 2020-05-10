@@ -43,7 +43,7 @@ class Migration(migrations.Migration):
                 ('org_courses', models.IntegerField(default=0, verbose_name='课程数')),
                 ('org_isauth', models.BooleanField(default=False, verbose_name='是否认证')),
                 ('org_ismedal', models.BooleanField(default=False, verbose_name='是否金牌')),
-                ('city', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='organizations.City', verbose_name='所在城市')),
+                ('city', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='apps.organizations.City', verbose_name='所在城市')),
             ],
             options={
                 'abstract': False,
@@ -63,7 +63,7 @@ class Migration(migrations.Migration):
                 ('tea_collect', models.IntegerField(default=0, verbose_name='收藏数')),
                 ('tea_age', models.IntegerField(default=20, verbose_name='年龄')),
                 ('tea_image', models.ImageField(upload_to='teacher/%Y/%m', verbose_name='头像')),
-                ('tea_org', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='organizations.CourseOrg', verbose_name='所属机构')),
+                ('tea_org', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='apps.organizations.CourseOrg', verbose_name='所属机构')),
                 ('user', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL, verbose_name='用户')),
             ],
             options={

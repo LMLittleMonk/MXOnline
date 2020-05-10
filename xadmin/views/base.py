@@ -249,7 +249,7 @@ class BaseAdminPlugin(BaseAdminObject):
 class BaseAdminView(BaseAdminObject, View):
     """ Base Admin view, support some comm attrs."""
 
-    base_template = 'xadmin/base.html'
+    base_template = 'xadmin/orglist.html'
     need_site_permission = True
 
     def __init__(self, request, *args, **kwargs):
