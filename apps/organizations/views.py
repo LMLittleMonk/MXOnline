@@ -21,18 +21,19 @@ class OrgView(View):
             all_orgs = all_orgs.filter(org_type=category)
 
         # 对所在城市进行筛选
-        city_id = request.GET.get('city',0)
-        if city_id:
+        city_id = request.GET.get('city','0')
+        if city_id != '0':
             if city_id.isdigit():
                 all_orgs = all_orgs.filter(city_id=int(city_id))
-
+        else:
+            all_orgs = all_orgs.all()
         org_nums = all_orgs.count()
 
         try:
             page = request.GET.get('page', 1)
         except PageNotAnInteger:
             page = 1
-        p = Paginator(all_orgs,per_page=10, request=request) # 每页显示多少个
+        p = Paginator(all_orgs,per_page=1, request=request) # 每页显示多少个
         orgs = p.page(page)
         return render(request, 'orglist.html',
                       {'city_id':int(city_id),'all_orgs':orgs,'org_nums':org_nums,'all_citys':all_citys, 'category':category,})

@@ -20,6 +20,7 @@ from django.views.generic import TemplateView
 from apps.users.views import LoginView
 from apps.organizations.views import OrgView
 from django.conf.urls import url
+from apps.courses.views import CourseView
 from django.views.static import serve
 from MXOnline.settings import MEDIA_ROOT
 
@@ -30,5 +31,6 @@ urlpatterns = [
     path('',TemplateView.as_view(template_name='index.html'),name = 'index'),
     path('login/',LoginView.as_view(), name = 'login'),
     path('orglist/',OrgView.as_view(), name = 'org_list'),
+    path('courselist/',CourseView.as_view(), name = 'course_list'),
     url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
 ]
