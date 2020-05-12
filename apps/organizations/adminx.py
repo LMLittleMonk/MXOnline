@@ -7,7 +7,7 @@ class CityAdmin(object):
     # 搜索字段
     search_fields = ["id", "cname"]
 
-xadmin.site.register(City, CityAdmin)
+
 
 class OrganizationAdmin(object):
     # 显示字典
@@ -15,7 +15,7 @@ class OrganizationAdmin(object):
     # 搜索字段
     search_fields = ["org_name", "id" ,"org_label", "org_click","org_collect","org_location"]
 
-xadmin.site.register(CourseOrg, OrganizationAdmin)
+
 
 class TeacherAdmin(object):
     # 显示字典
@@ -23,4 +23,6 @@ class TeacherAdmin(object):
     # 搜索字段
     search_fields = ["id", "tea_name","tea_org","tea_workyears","tea_company","tea_position","tea_features"]
 
+xadmin.site.register(City, CityAdmin)
+xadmin.site.register(CourseOrg, OrganizationAdmin)
 xadmin.site.register(Teacher, TeacherAdmin)

@@ -5,7 +5,7 @@
     <section>
         <div class="wp">
             <ul class="crumbs">
-                <li><a href="index.html">首页</a>></li>
+                <li><a href="{% url 'index' %}">首页</a>></li>
                 <li>课程机构</li>
             </ul>
         </div>
@@ -58,9 +58,9 @@
                     <div class="layout">
                         <div class="head">
                             <ul class="tab_header">
-                                <li class="active"><a href="?ct=&city=">全部</a></li>
-                                <li class=""><a href="?sort=students&ct=&city=">学习人数 &#8595;</a></li>
-                                <li class=""><a href="?sort=courses&ct=&city=">课程数 &#8595;</a></li>
+                                <li class="{% ifequal sort '' %}active{% endifequal %}"><a href="?ct=&city=0">全部</a></li>
+                                <li class="{% ifequal sort 'students' %}active{% endifequal %}"><a href="?sort=students&ct={{ category }}&city={{ city_id }}">学习人数 &#8595;</a></li>
+                                <li class="{% ifequal sort 'courses' %}active{% endifequal %}"><a href="?sort=courses&ct={{ category }}&city={{ city_id }}">课程数 &#8595;</a></li>
                             </ul>
                         </div>
                         {% for org in all_orgs.object_list %}
@@ -150,39 +150,51 @@
                     </div>
                     <p class="error company-tips" id="jsCompanyTips"></p>
                     <input class="btn" type="text" id="jsStayBtn" value="立即咨询 >"/>
+                    {% csrf_token %}
                 </form>
             </div>
 
             <div class="right companyrank layout">
                 <div class="head">授课机构排名</div>
 
-
+                {% for org in orgs_order %}
                 <dl class="des">
-                    <dt class="num fl">1</dt>
+                    <dt class="num fl">{{forloop.counter}}</dt>
                     <dd>
-                        <a href="/company/2/"><h1>慕学网</h1></a>
-                        <p>北京市</p>
+                        <a href="/company/2/"><h1>{{org.org_name}}</h1></a>
+                        <p>{{org.city}}</p>
                     </dd>
                 </dl>
-
-                <dl class="des">
-                    <dt class="num fl">2</dt>
-                    <dd>
-                        <a href="/company/2/"><h1>慕学网2</h1></a>
-                        <p>深圳市</p>
-                    </dd>
-                </dl>
-
-                <dl class="des">
-                    <dt class="num fl">3</dt>
-                    <dd>
-                        <a href="/company/2/"><h1>北京大学</h1></a>
-                        <p>北京市</p>
-                    </dd>
-                </dl>
-
+                {% endfor %}
 
             </div>
         </div>
     </section>
+{% endblock %}
+{% block custom_js %}
+    <script>
+        $(function () {
+            $(document).ready(function () {
+                $('#jsStayBtn').on('click', function () {
+                    $.ajax({
+                        cache: false,
+                        type: 'POST',
+                        url: '{% url 'org:add_ask' %}',
+                        async: true,
+                        data: $('#jsStayForm').serialize(),
+                        success: function (data) {
+                            if (data.status == 'success'){
+                                $('#jsStayForm')[0].reset();
+                                $('#jsCompanyTips').html(data.msg)
+                            }else if(data.status == 'fail'){
+                                $('#jsCompanyTips').html(data.msg)
+
+                            }
+                        }
+                    })
+                })
+            })
+
+        })
+    </script>
 {% endblock %}
