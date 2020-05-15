@@ -87,7 +87,9 @@ DATABASES = {
         'NAME': 'mxonline',  # 数据库名字
         'USER': 'root',
         'PASSWORD': 'root',
-        'HOST': 'localhost',
+        # 'HOST': 'localhost',
+        'HOST': '120.26.185.249',
+
         'PORT': 3306,
     }
 }

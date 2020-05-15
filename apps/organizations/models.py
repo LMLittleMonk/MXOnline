@@ -30,21 +30,30 @@ class CourseOrg(BaseModel):
         verbose_name_plural = verbose_name
     def __str__(self):
         return self.org_name
+    def courses(self):
+        courses = self.course_set.filter(is_classics=True)[:3]
+        return courses
+
 
 class Teacher(BaseModel):
-    user = models.OneToOneField(UserProfile, on_delete=models.SET_NULL, null=True, blank=True, verbose_name="用户")
-    tea_org = models.ForeignKey(CourseOrg,on_delete=models.CASCADE,verbose_name="所属机构")
-    tea_name = models.CharField(verbose_name="教师名",max_length=10)
-    tea_workyears = models.IntegerField(verbose_name= "工作年限")
-    tea_company = models.CharField(verbose_name="就职公司",max_length=20)
-    tea_position = models.CharField(max_length=20,verbose_name="公司职位")
-    tea_features = models.CharField(max_length=100,verbose_name="教学特点")
-    tea_click = models.IntegerField(verbose_name="点击数", default=0)
-    tea_collect = models.IntegerField(verbose_name="收藏数", default=0)
-    tea_age = models.IntegerField(default=20,verbose_name="年龄")
-    tea_image = models.ImageField(upload_to="teacher/%Y/%m", verbose_name="头像", max_length=100)
+    user = models.OneToOneField(UserProfile, on_delete=models.SET_NULL, null=True, blank=True,verbose_name="用户")
+    org = models.ForeignKey(CourseOrg, on_delete=models.CASCADE, verbose_name="所属机构")
+    name = models.CharField(max_length=50, verbose_name="教师名",default="")
+    work_years = models.IntegerField(default=0, verbose_name="工作年限")
+    work_company = models.CharField(max_length=50, verbose_name="就职公司",default="")
+    work_position = models.CharField(max_length=50, verbose_name="公司职位",default="")
+    points = models.CharField(max_length=50, verbose_name="教学特点",default="好")
+    click_nums = models.IntegerField(default=0, verbose_name="点击数")
+    fav_nums = models.IntegerField(default=0, verbose_name="收藏数")
+    age = models.IntegerField(default=18, verbose_name="年龄")
+    image = models.ImageField(upload_to="teacher/%Y/%m", verbose_name="头像", max_length=100)
+
     class Meta:
-        verbose_name = "老师信息"
+        verbose_name = "教师"
         verbose_name_plural = verbose_name
+
     def __str__(self):
-        return self.tea_name
+        return self.name
+
+    def course_nums(self):
+        return self.course_set.all().count()

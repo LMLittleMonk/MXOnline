@@ -16,12 +16,11 @@ class OrganizationAdmin(object):
     search_fields = ["org_name", "id" ,"org_label", "org_click","org_collect","org_location"]
 
 
-
 class TeacherAdmin(object):
-    # 显示字典
-    list_display = ["id", "tea_name","tea_org","tea_workyears","tea_company","tea_position","tea_features","tea_age"]
-    # 搜索字段
-    search_fields = ["id", "tea_name","tea_org","tea_workyears","tea_company","tea_position","tea_features"]
+    list_display = ['org', 'name', 'work_years', 'work_company']
+    search_fields = ['org', 'name', 'work_years', 'work_company']
+    list_filter = ['org', 'name', 'work_years', 'work_company']
+
 
 xadmin.site.register(City, CityAdmin)
 xadmin.site.register(CourseOrg, OrganizationAdmin)
