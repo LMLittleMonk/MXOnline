@@ -17,6 +17,7 @@ class OrgView(View):
         :param kwargs:
         :return:
         """
+        user = request.user
         all_orgs = CourseOrg.objects.all()
         all_citys = City.objects.all()
         # 获取点击的类目
@@ -56,6 +57,7 @@ class OrgView(View):
                        'category': category,
                        'sort': sort,
                        'orgs_order': orgs_order,
+                       'user':user
                        })
 
 
@@ -85,6 +87,7 @@ class OrgDetailHomeView(View):
         :return:
         """
         # 根据id查询课程
+        user = request.user
         org = CourseOrg.objects.get(id=int(org_id))
         # 点击到课程 的详情就记录一次点击数
         courses = org.course_set.all()
@@ -98,11 +101,13 @@ class OrgDetailHomeView(View):
                           "org": org,
                           'courses': courses,
                           'teachers': teachers,
+                          'user':user
                       })
 
 
 class OrgDetailCourseView(View):
     def get(self, request, course_org_id, *args, **kwargs):
+        user = request.user
         org = CourseOrg.objects.get(id=int(course_org_id))
         all_courses = org.course_set.all()
 
@@ -116,16 +121,25 @@ class OrgDetailCourseView(View):
                       {
                           "org": org,
                           'courses': courses,
+                          'user':user
                       })
+
+
+
 class OrgDetailView(View):
     def get(self, request, org_id, *args, **kwargs):
         org = CourseOrg.objects.get(id=int(org_id))
+        user = request.user
         return render(request, 'org-detail-desc.html',
                       {
                           "org": org,
+                          'user':user
                       })
+
+
 class TeacherView(View):
     def get(self, request, org_id, *args, **kwargs):
+        user = request.user
         org = CourseOrg.objects.get(id=int(org_id))
         teachers = org.teacher_set.all()
         try:
@@ -138,4 +152,5 @@ class TeacherView(View):
                       {
                           "org": org,
                           "teachers":teachers,
+                          'user':user
                       })

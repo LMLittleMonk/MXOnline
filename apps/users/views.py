@@ -8,10 +8,13 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth import authenticate,login
 
 def IndexView(request):
-    return render(request,'index.html')
+    user=request.user
+    return render(request,'index.html',{'user':user})
 
 class LoginView(View):
+
     def get(slef,request,*args,**kwargs):
+
         return render(request,'login.html')
     def post(self,request,*args,**kwargs):
         loginform = LoginForm(request.POST)

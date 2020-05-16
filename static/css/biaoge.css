@@ -1,0 +1,27 @@
+.myTable {
+margin: auto;
+height: 300px;
+width: 700px;
+}
+
+.myTitle {
+background-color: #F2F3F5;
+}
+
+tr:hover {
+background: #edffcf;
+}
+
+th {
+font-size: 16px;
+font-weight: bold;
+}
+
+td {
+font-size: 14px;
+}
+
+th,td {
+border: solid 1px black;
+text-align: center;
+}

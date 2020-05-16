@@ -89,6 +89,8 @@ class Lesson(BaseModel):
     def __str__(self):
         return self.name
 
+    def get_video_nums(self):
+        return 2*(self.video_set.all().count())-1
 
 class Video(BaseModel):
     lesson = models.ForeignKey(Lesson, verbose_name="章节", on_delete=models.CASCADE)
