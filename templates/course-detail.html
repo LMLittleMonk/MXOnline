@@ -50,7 +50,7 @@
                                 <li class="piclist"><span class="pram word4">学习用户：</span>
 
                                     <span class="pic"><img width="40" height="40"
-                                                           src="/static/media/image/2016/12/default_big_14.png"/></span>
+                                                           src="{{ user.image.url }}"/></span>
 
                                 </li>
                             </ul>
@@ -132,7 +132,6 @@
                             <tr class="myTitle" >
                                 <td style="word-break: break-all;" width="53" valign="top">课程章节</td>
                                 <td style="word-break: break-all;" width="53" valign="top">小节</td>
-                                <td style="word-break: break-all;" width="53" valign="top">小节数<br/></td>
                                 <td style="word-break: break-all;" width="53" valign="top">时长<br/></td>
                                 <td style="word-break: break-all;" width="53" valign="top">学习人数<br/></td>
                                 <td style="word-break: break-all;" width="53" valign="top">点击数<br/></td>
@@ -141,11 +140,10 @@
                             {% for lesson in lessons %}
 
                             <tr>
-                                <th rowspan="{{ lesson.get_video_nums }}" >{{ lesson.name }}<br/></th>
+                                <th rowspan="{{ lesson.get_video_nums }}" >{{lesson.name }}<br/></th>
                                 {% for video in lesson.video_set.all %}
-                                <td style="word-break: break-all;" width="53" valign="top">{{ video.name }}<br/></td>
-                                <td style="word-break: break-all;" width="53" valign="top">{{lesson.video_set.all.count}}<br/></td>
-                                <td style="word-break: break-all;" width="53" valign="top">{{lesson.learn_times}}<br/></td>
+                                <td style="word-break: break-all;" width="53" valign="top">{{video.name }}<br/></td>
+                                <td style="word-break: break-all;" width="53" valign="top">{{video.learn_times}}<br/></td>
                                 <td style="word-break: break-all;" width="53" valign="top">{{course.students}}<br/></td>
                                 <td style="word-break: break-all;" width="53" valign="top">{{course.click_nums}}<br/></td>
                                 <td style="word-break: break-all;" width="53" valign="top">{{course.fav_nums}}<br/></td>
