@@ -61,6 +61,8 @@ class CourseDetailView(View):
 class CourseLessonView(View):
     def get(self, request, course_id, *args, **kwargs):
         course = Course.objects.get(id=int(course_id))
+        fav_courses = Course.objects.exclude(id=int(course_id)).order_by('-fav_nums')
         return render(request,'course-video.html',{
-            'course':course
+            'course':course,
+            'fav_courses':fav_courses
         })

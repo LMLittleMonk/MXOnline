@@ -103,7 +103,11 @@ i.hasOpenOn {
 .mod-chapters .chapter .video li a:hover {
     color: #14191e;
 }
-.mod-chapters .chapter .video li a.studyvideo,
+.mod-chapters .chapter .video li a.studyvideo
+{
+    background: url('/static/img/learnicon.png?v3.1') no-repeat 0 -121px;
+    font-size: 13px;
+}
 .mod-chapters .chapter .video li a.practise,
 .mod-chapters .chapter .video li a.programme {
     background: url('/static/img/learnicon.png?v3.1') no-repeat 0 -121px;
@@ -208,7 +212,7 @@ i.hasOpenOn {
 }
 .uncourse {
     color: #d0d6d9;
-    font-size: 14px;
+    font-size: 13px;
     text-align: center;
     padding: 80px 0 30px 0;
 }
