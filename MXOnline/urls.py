@@ -30,6 +30,7 @@ urlpatterns = [
     path('login/',LoginView.as_view(), name = 'login'),
     path('register/',RegisterView.as_view(), name = 'register'),
     url(r'^org/', include(('apps.organizations.urls','organizations'),namespace='org')),
+    url(r'^user/', include(('apps.users.urls','users'),namespace='user')),
     url(r'^course/', include(('apps.courses.urls','courses'),namespace='course')),
     url(r'^op/', include(('apps.operations.urls','operations'),namespace='op')),
     url(r'^teacher/', include(('apps.teachers.urls','teachers'),namespace='teacher')),

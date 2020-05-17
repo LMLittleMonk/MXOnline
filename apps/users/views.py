@@ -29,6 +29,7 @@ class LoginView(View):
                 return render(request,'login.html',{'msg':'用户名或密码错误','loginform':loginform})
         else:
             return render(request,'login.html',{'loginform':loginform})
+
 class RegisterView(View):
     def get(slef,request,*args,**kwargs):
         return render(request,'register.html')
@@ -43,3 +44,7 @@ class RegisterView(View):
     #         return render(request,'login.html',{'registerfoem':registerform})
     #     else:
     #         return render(request, 'register.html', {'msg': '用户名或密码错误', 'registerform': registerform})
+
+class UserInfoView(View):
+    def get(self,request,*args,**kwargs):
+        return render(request,'usercenter-info.html')
