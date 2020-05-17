@@ -3604,7 +3604,8 @@ footer .footer .line {
 .butler_detail_list .des li {
     width: 100%;
     float: left;
-    line-height: 20px;
+    font-size:  14px;
+    line-height: 25px;
     color: #848484;
 }
 

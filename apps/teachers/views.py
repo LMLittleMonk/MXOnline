@@ -30,3 +30,17 @@ class TeacherListView(View):
             'user':user
 
         })
+
+
+class TeacherDetailView(View):
+
+    def get(self,request,id,*args,**kwargs):
+        user = request.user
+        teacher = Teacher.objects.get(id=int(id))
+        fav_teachers = teacher.org.teacher_set.order_by('-fav_nums')
+
+        return render(request,'teacher-detail.html',{
+            'teacher':teacher,
+            'user':user,
+            'fav_teachers':fav_teachers
+        })
