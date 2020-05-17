@@ -26,7 +26,7 @@
                                 </div>
                                 <div class="btn">
                                 <span class="fl btn1 collectionbtn" id="jsLeftBtn">
-                                     收藏
+                                     {% if has_fav_teacher  %}已收藏{% else %}收藏{% endif %}
                                 </span>
                                     <span class="fr btn2 shareBtn bdsharebuttonbox"
                                           data-text="授课教师-{{ teacher.name }}老师-慕学网"
@@ -106,7 +106,7 @@
                             <h2 class="center">{{ teacher.org.org_name }}</h2>
                         </a>
                         <p class="center tell">地址：{{ teacher.org.org_location }}</p>
-                        <a class="btn" id="jsRightBtn">收藏</a>
+                        <a class="btn" id="jsRightBtn">{% if has_fav_org  %}已收藏{% else %}收藏{% endif %}</a>
                     </div>
                 </div>
                 <div class="butler_detail_cont">
@@ -140,4 +140,44 @@
     </section>
 {% endblock %}
 
+{% block custom_js %}
+    <script>
+        function add_fav(current_elem, fav_id, fav_type) {
+            $.ajax({
+                cache: false,
+                type: 'POST',
+                url: '{% url 'op:fav' %}',
+                async: true,
+                data: {'fav_id': fav_id, 'fav_type': fav_type},
+                beforeSend: function (xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                },
+                success: function (data) {
+                    if (data.status == 'fail') {
+                        if (data.msg == '用户未登录') {
+                            window.location.href = '{% url 'login' %}'
+                        } else {
+                            alert(data.msg)
+                        }
+                    } else if (data.status == 'success') {
+                        current_elem.text(data.msg)
+                    }
+                }
+            })
+        }
+
+        {#机构收藏的实现#}
+        $(document).ready(function () {
+            $('#jsRightBtn').on('click', function () {
+                add_fav($(this), {{ teacher.id }}, 2)
+            })
+        })
+        {#老师收藏的实现#}
+         $(document).ready(function () {
+            $('#jsLeftBtn').on('click', function () {
+                add_fav($(this), {{ teacher.id }}, 3)
+            })
+        })
+    </script>
+{% endblock %}
 

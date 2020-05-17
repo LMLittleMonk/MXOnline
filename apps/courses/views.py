@@ -52,9 +52,9 @@ class CourseDetailView(View):
         has_fav_org = False
         if request.user.is_authenticated:
             # 查询用户是否收藏了该课程和机构 fav_type=1证明是课程收藏，如果有，证明用户收藏了这个课
-            if UserFavorite.objects.filter(user=request.user, fav_id=course.id, fav_type=1):
+            if UserFavorite.objects.filter(user=request.user, fav_id=course.teacher.id, fav_type=1):
                 has_fav_course = True
-            if UserFavorite.objects.filter(user=request.user, fav_id=course.id, fav_type=2):
+            if UserFavorite.objects.filter(user=request.user, fav_id=course.teacher.id, fav_type=2):
                 has_fav_org = True
 
         return render(request, 'course-detail.html',

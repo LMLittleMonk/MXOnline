@@ -47,11 +47,12 @@
                                 </li>
                                 <li><span class="pram word3">课程类别：</span><span title="">{{ course.category }}</span>
                                 </li>
-                                <li class="piclist"><span class="pram word4">学习用户：</span>
+                                <li><span class="pram word3">教师名：</span><span title="">{{ course.teacher.name }}</span>
+                                </li>
+                                <li class="piclist"><span class="pram word4">教师头像：</span>
 
                                     <span class="pic"><img width="40" height="40"
-                                                           src="{{ user.image.url }}"/></span>
-
+                                                           src="{{ course.teacher.image.url }}"/></span>
                                 </li>
                             </ul>
                             <div class="btns">
@@ -246,14 +247,14 @@
         {#课程收藏的实现#}
         $(document).ready(function () {
             $('#jsLeftBtn').on('click', function () {
-                add_fav($(this), {{ course.id }}, 1)
+                add_fav($(this), {{ course.teacher.id }}, 1)
             })
         })
 
         {#机构收藏的实现#}
         $(document).ready(function () {
             $('#jsRightBtn').on('click', function () {
-                add_fav($(this), {{ course.id }}, 2)
+                add_fav($(this), {{ course.teacher.id }}, 2)
             })
         })
     </script>

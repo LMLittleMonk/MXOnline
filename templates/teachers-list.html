@@ -23,10 +23,10 @@
                             <li class="{% if sort == '' %}active{% endif %}"><a href="?sort=">全部</a></li>
                             <li class="{% if sort == 'hot' %}active{% endif %}"><a href="?sort=hot">人气 &#8595;</a></li>
                         </ul>
-                        <div class="fr butler-num">共<span class="key">{{ teachers.count }}</span>人&nbsp;&nbsp;&nbsp
+                        <div class="fr butler-num">共<span class="key">{{teachers.count }}</span>人&nbsp;&nbsp;&nbsp
                         </div>
                     </div>
-                    {% for teacher in teachers %}
+                    {% for teacher in all_teachers.object_list %}
                         <dl class="des">
                             <dt>
                                 <a href="{% url 'teacher:detail' teacher.id %}">
