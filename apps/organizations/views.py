@@ -117,6 +117,7 @@ class OrgDetailCourseView(View):
             page = 1
         p = Paginator(all_courses, per_page=1, request=request)  # 每页显示多少个
         courses = p.page(page)
+
         return render(request, 'org-detail-course.html',
                       {
                           "org": org,

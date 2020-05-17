@@ -32,5 +32,6 @@ urlpatterns = [
     url(r'^org/', include(('apps.organizations.urls','organizations'),namespace='org')),
     url(r'^course/', include(('apps.courses.urls','courses'),namespace='course')),
     url(r'^op/', include(('apps.operations.urls','operations'),namespace='op')),
+    url(r'^teacher/', include(('apps.teachers.urls','teachers'),namespace='teacher')),
     url(r'^media/(?P<path>.*)$', serve, {"document_root": MEDIA_ROOT}),
 ]

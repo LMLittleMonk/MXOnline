@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'apps.organizations.apps.OrganizationsConfig',
     'pure_pagination',
     'apps.operations.apps.OperationsConfig',
+    'apps.teachers.apps.TeachersConfig',
 ]
 
 MIDDLEWARE = [
