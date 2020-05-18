@@ -56,10 +56,11 @@
             <div class="diarys">
                 <div class="module5 share company-diary-box" style="padding:10px 0;">
                     <div class="left">
-                        <img class="pic" src="{{MEDIA_URL}}{{ teacher.image }}"/>
+                        <img class="pic" src="{{ teacher.image.url }}"/>
                         <p>昵称：{{teacher.user.nick_name}}</p>
                     </div>
-                    {% for course in teacher.course_set.all %}
+                    {% for course in teacher.course_set.all.order_by %}
+                        {% if forloop.counter == 1 %}
                     <div class="right">
                         <div class="top">
                             <div class="fl">
@@ -71,6 +72,7 @@
                             <p>{{ course.detail }}</p>
                         </div>
                     </div>
+                        {% endif %}
                     {% endfor %}
                 </div>
 

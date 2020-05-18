@@ -4,13 +4,13 @@ from apps.courses.models import *
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from apps.operations.models import UserFavorite
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from apps.operations.models import UserCourse
 
 class CourseView(View):
     def get(self,request,*args,**kwargs):
         user = request.user
         course = Course.objects.order_by('-add_time')
-        hot_courses = Course.objects.order_by('-click_nums')[:3]
+        hot_courses = Course.objects.order_by('-click_nums')[:2]
         sort = request.GET.get('sort',"")
         if sort == 'hot':
             course = course.order_by('-click_nums')
@@ -40,12 +40,15 @@ class CourseDetailView(View):
         :return:
         """
         # 根据id查询课程
-        user = request.user
+
+
         course = Course.objects.get(id=int(course_id))
+        tag = course.tag
+        courses = Course.objects.filter(tag=tag).exclude(id=course_id)[:3]
         org = course.course_org
         lessons = course.lesson_set.all()
         teachers_nums = org.teacher_set.all().count()
-        fav_courses = Course.objects.exclude(id=int(course_id)).order_by('-fav_nums')[:3]
+
         # 点击到课程 的详情就记录一次点击数
         course.click_nums += 1
         course.save()
@@ -66,8 +69,7 @@ class CourseDetailView(View):
                        "org":org,
                        'teachers_nums':teachers_nums,
                        'lessons':lessons,
-                       'fav_courses': fav_courses,
-                       'user': user
+                       'courses':courses
                     })
 
 
@@ -75,10 +77,18 @@ class CourseLessonView(LoginRequiredMixin,View):
     login_url = '/login/'
     def get(self, request, course_id, *args, **kwargs):
         user = request.user
+
         course = Course.objects.get(id=int(course_id))
+        user_courses = UserCourse.objects.filter(course=course)
+        user_ids = [user_course.user.id for user_course in user_courses]
+        all_courses = UserCourse.objects.filter(user_id__in=user_ids).exclude(id=course_id)
+        item = []
+        for all_course in all_courses:
+            item.append(all_course.course)
+
         fav_courses = Course.objects.exclude(id=int(course_id)).order_by('-fav_nums')[:3]
         return render(request,'course-video.html',{
             'course':course,
             'fav_courses':fav_courses,
-            'user':user
+            'item':item
         })

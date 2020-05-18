@@ -138,11 +138,11 @@
                             <div class="cp-tab-pannel js-comp-tab-pannel" data-pannel="course" style="display: block">
                                 <!-- img 200 x 112 -->
                                 <ul class="other-list">
-                                    {% for fav_cours in fav_courses %}
+                                    {% for all_course in item %}
                                     <li class="curr">
                                         <a href="course-detail.html" target="_blank">
-                                            <img src="{{fav_cours.image.url}}" alt="{{ fav_cours.name }}">
-                                            <span class="name autowrap">{{ fav_cours.name }}</span>
+                                            <img src="{{all_course.image.url}}" alt="{{ all_course.name }}">
+                                            <span class="name autowrap">{{ all_course.name }}</span>
                                         </a>
                                     </li>
                                       {% endfor %}

@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load staticfiles %}
 {% block custom_bread %}
     <section>
         <div class="wp">
@@ -105,10 +105,12 @@
                                     <span>教 &nbsp;师&nbsp; 数：{{ teachers_nums }}</span>
                                 </li>
                                 <li>所在地区：&nbsp;&nbsp;{{ org.org_location }}</li>
+                                {% if course.course_org.org_isauth %}
                                 <li>认&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;证&nbsp;:
                                     &nbsp;&nbsp;
-                                    <img title="金牌机构" , src="/static/images/gold.png"/>
+                                    <img title="金牌机构" , src="{% static '/images/gold.png' %}"/>
                                 </li>
+                                {% endif %}
                             </ul>
                         </div>
                     </div>
@@ -194,7 +196,7 @@
                 <div class="right layout">
                     <div class="head">相关课程推荐</div>
                     <div class="group_recommend">
-                        {% for course in fav_courses %}
+                        {% for course in courses %}
                         <dl>
                             <dt>
                                 <a target="_blank" href="">
