@@ -31,10 +31,9 @@ class AddFavView(View):
                     course.fav_nums -= 1
                     course.save()
                 elif fav_type == 2:
-                    cousre = Course.objects.get(id = fav_id)
-                    course_org = cousre.course_org
-                    course_org.org_collect -= 1
-                    course_org.save()
+                    org = CourseOrg.objects.get(id = fav_id)
+                    org.org_collect -= 1
+                    org.save()
 
                 elif fav_type == 3:
                     teacher =Teacher.objects.get(id=fav_id)
@@ -55,10 +54,9 @@ class AddFavView(View):
                     course.fav_nums += 1
                     course.save()
                 elif fav_type == 2:
-                    cousre = Course.objects.get(id = fav_id)
-                    course_org = cousre.course_org
-                    course_org.org_collect += 1
-                    course_org.save()
+                    org = CourseOrg.objects.get(id = fav_id)
+                    org.org_collect += 1
+                    org.save()
 
                 elif fav_type == 3:
                     teacher =Teacher.objects.get(id=fav_id)

@@ -8,7 +8,6 @@ from apps.operations.models import UserFavorite
 class TeacherListView(View):
     def get(self,request,*args,**kwargs):
 
-        user =request.user
         teachers = Teacher.objects.all()
         fav_teachers = teachers.order_by('-fav_nums')[:3]
         sort = request.GET.get('sort','')
@@ -28,7 +27,6 @@ class TeacherListView(View):
             'teachers':teachers,
             'fav_teachers':fav_teachers,
             'sort':sort,
-            'user':user
 
         })
 
@@ -46,7 +44,7 @@ class TeacherDetailView(View):
             # 查询用户是否收藏了该课程和机构 fav_type=1证明是课程收藏，如果有，证明用户收藏了这个课
             if UserFavorite.objects.filter(user=request.user, fav_id=teacher.id, fav_type=3):
                 has_fav_teacher = True
-            if UserFavorite.objects.filter(user=request.user, fav_id=teacher.id, fav_type=2):
+            if UserFavorite.objects.filter(user=request.user, fav_id=teacher.org.id, fav_type=2):
                 has_fav_org = True
 
         return render(request,'teacher-detail.html',{

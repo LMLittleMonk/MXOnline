@@ -3,6 +3,8 @@ from django.views.generic import View
 from apps.courses.models import *
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
 from apps.operations.models import UserFavorite
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 
 class CourseView(View):
     def get(self,request,*args,**kwargs):
@@ -52,9 +54,9 @@ class CourseDetailView(View):
         has_fav_org = False
         if request.user.is_authenticated:
             # 查询用户是否收藏了该课程和机构 fav_type=1证明是课程收藏，如果有，证明用户收藏了这个课
-            if UserFavorite.objects.filter(user=request.user, fav_id=course.teacher.id, fav_type=1):
+            if UserFavorite.objects.filter(user=request.user, fav_id=course.id, fav_type=1):
                 has_fav_course = True
-            if UserFavorite.objects.filter(user=request.user, fav_id=course.teacher.id, fav_type=2):
+            if UserFavorite.objects.filter(user=request.user, fav_id=course.course_org.id, fav_type=2):
                 has_fav_org = True
 
         return render(request, 'course-detail.html',
@@ -69,7 +71,8 @@ class CourseDetailView(View):
                     })
 
 
-class CourseLessonView(View):
+class CourseLessonView(LoginRequiredMixin,View):
+    login_url = '/login/'
     def get(self, request, course_id, *args, **kwargs):
         user = request.user
         course = Course.objects.get(id=int(course_id))

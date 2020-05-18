@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 import xadmin
 from django.views.generic import TemplateView
-from apps.users.views import LoginView,RegisterView
+from apps.users.views import LoginView,RegisterView,LogoutView
 from django.conf.urls import url,include
 from django.views.static import serve
 from MXOnline.settings import MEDIA_ROOT
@@ -28,6 +28,7 @@ urlpatterns = [
     # path('',views.index ),
     path('',TemplateView.as_view(template_name='index.html'),name = 'index'),
     path('login/',LoginView.as_view(), name = 'login'),
+    path('logout/',LogoutView.as_view(), name = 'logout'),
     path('register/',RegisterView.as_view(), name = 'register'),
     url(r'^org/', include(('apps.organizations.urls','organizations'),namespace='org')),
     url(r'^user/', include(('apps.users.urls','users'),namespace='user')),

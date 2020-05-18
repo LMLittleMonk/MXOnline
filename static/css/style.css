@@ -3638,7 +3638,10 @@ footer .footer .line {
 
 .butler_detail_list .btn .btn1 {
     background: #717171 url(../images/btn3.png) no-repeat 15px center;
+
 }
+
+
 
 .butler_detail_list .btn .btn2 {
     background: #3a3a3a url(../images/btn4.png) no-repeat 20px center;
@@ -8230,10 +8233,10 @@ table .upload-btn {
     color: #fff;
 }
 
-.collectionbtn.collected {
+.collectionbtn .collected {
     background: #ff7800;
     cursor: pointer;
-    color: #fff !important;
+    color: #d71200 !important;
 }
 
 .butler-company-box .clear {
