@@ -93,10 +93,10 @@ class CourseLessonView(LoginRequiredMixin,View):
         for all_course in all_courses:
             item.append(all_course.course)
 
-        fav_courses = Course.objects.exclude(id=int(course_id)).order_by('-fav_nums')[:3]
+
         return render(request,'course-video.html',{
             'course':course,
-            'fav_courses':fav_courses,
+
             'item':item
         })
 
@@ -119,4 +119,20 @@ class CourseCommentView(View):
             'fav_courses': fav_courses,
             'item': item,
             'comments':comment
+        })
+
+class CoursePlayView(View):
+    def get(self, request, lesson_id,video_id,*args, **kwargs):
+        video = Video.objects.get(id = int(video_id),lesson_id = int(lesson_id))
+        course = video.lesson.course
+        user_courses = UserCourse.objects.filter(course=course)
+        user_ids = [user_course.user.id for user_course in user_courses]
+        all_courses = UserCourse.objects.filter(user_id__in=user_ids).exclude(id=course.id)
+        item = []
+        for all_course in all_courses:
+            item.append(all_course.course)
+        return render(request,'course-play.html',{
+            'video':video,
+            'course':course,
+            'item':item
         })
