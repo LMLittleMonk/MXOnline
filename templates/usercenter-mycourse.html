@@ -21,7 +21,7 @@
             <ul>
                 <li class=""><a href="{% url 'user:detail' %}">个人资料</a></li>
                 <li class="active2"><a href="{% url 'user:mycourse' %}">我的课程</a></li>
-                <li><a href="usercenter-fav-course.html">我的收藏</a></li>
+                <li><a href="{% url 'user:favcourse' %}">我的收藏</a></li>
                 <li>
                     <a href="usercenter-message.html" style="position: relative;">
                         我的消息

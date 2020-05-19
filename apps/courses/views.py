@@ -43,8 +43,16 @@ class CourseDetailView(View):
 
 
         course = Course.objects.get(id=int(course_id))
-        tag = course.tag
-        courses = Course.objects.filter(tag=tag).exclude(id=course_id)[:3]
+        tags = course.coursetag_set.all()
+        # 遍历
+        tag_list = [tag.tag for tag in tags]
+        course_tags = CourseTag.objects.filter(tag__in=tag_list).exclude(course__id=course.id)
+        courses = set()
+        for course_tag in course_tags:
+            courses.add(course_tag.course)
+
+
+
         org = course.course_org
         lessons = course.lesson_set.all()
         teachers_nums = org.teacher_set.all().count()
@@ -76,7 +84,6 @@ class CourseDetailView(View):
 class CourseLessonView(LoginRequiredMixin,View):
     login_url = '/login/'
     def get(self, request, course_id, *args, **kwargs):
-        user = request.user
 
         course = Course.objects.get(id=int(course_id))
         user_courses = UserCourse.objects.filter(course=course)

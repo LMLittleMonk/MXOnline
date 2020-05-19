@@ -86,7 +86,7 @@
                     <h2 class="active">手机注册</h2>
                 </div>
                 <div class="tab-form">
-                    <form id="mobile_register_form" method="post" action="" autocomplete="off">
+                    <form id="mobile_register_form" method="post" action="{% url 'register' %}" autocomplete="off">
 
                         <div class="form-group marb20 blur ">
                             <input id="jsRegMobile" name="username" type="text" placeholder="请输入您的用户名">
@@ -96,8 +96,11 @@
 {#                            <input type="hidden" name="captcha_0" value="5b0fe7811ef645d9cb94cc7af579e855ec49819a" required id="id_captcha_0"><input type="text" name="captcha_1" required id="id_captcha_1" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">#}
 {#                        </div> #}
                         <div class="form-group marb20 blur" id="jsRefreshCode">
-                            <input type="text" name="email" id="account_l" placeholder="手机号/邮箱">
+                            <input type="text" name="email" id="account_l" placeholder="邮箱">
                         </div>
+{#                        <div class="form-group marb20 blur" id="">#}
+{#                            <input type="text" name="mobile" id="" placeholder="手机号">#}
+{#                        </div>#}
 {#                        <div class="clearfix">#}
 {#                            <div class="form-group marb8 verify-code ">#}
 {#                                <input id="jsPhoneRegCaptcha" name="code" type="text" placeholder="输入手机验证码">#}

@@ -11,3 +11,9 @@ class RegisterForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ['username','password','email']
+
+class ImageUploadForm(forms.Form):
+
+    class Meta:
+        model = UserProfile
+        fields = ['image']

@@ -1,17 +1,19 @@
 from django.shortcuts import render
 from django.views.generic.base import View
 from apps.users.models import *
-from apps.users.form import LoginForm,RegisterForm
+from apps.users.form import LoginForm,RegisterForm,ImageUploadForm
 from django.urls import reverse
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth import authenticate,login,logout
-
-
-
+from django.contrib.auth.hashers import make_password
+from apps.operations.models import UserFavorite
+from apps.courses.models import Course
 
 def IndexView(request):
 
     return render(request,'index.html')
+
+
 
 class LoginView(View):
 
@@ -45,6 +47,7 @@ class LoginView(View):
             return render(request,'login.html',{'loginform':loginform})
 
 
+
 class LogoutView(View):
 
     def get(slef,request,*args,**kwargs):
@@ -56,21 +59,39 @@ class LogoutView(View):
 class RegisterView(View):
     def get(slef,request,*args,**kwargs):
         return render(request,'register.html')
-    # def post(self,request,*args,**kwargs):
-    #     registerform = RegisterForm(request.POST)
-    #     if registerform.is_valid():
-    #         username = registerform.cleaned_data["username"]
-    #         password = registerform.cleaned_data["password"]
-    #         email = registerform.cleaned_data["email"]
-    #         user1 = UserProfile.objects.create(username=username,password=password,email=email)
-    #         user1.save()
-    #         return render(request,'login.html',{'registerfoem':registerform})
-    #     else:
-    #         return render(request, 'register.html', {'msg': '用户名或密码错误', 'registerform': registerform})
+    def post(self,request,*args,**kwargs):
+        registerform = RegisterForm(request.POST)
+        if registerform.is_valid():
+            username = registerform.cleaned_data["username"]
+            password = registerform.cleaned_data["password"]
+            email = registerform.cleaned_data["email"]
+            user = UserProfile.objects.filter(username=username)
+            if user:
+                return render(request, 'register.html', {'msg': '用户名重复请换一个用户名', 'registerform': registerform})
+            else:
+                password = make_password(password)
+                user1 = UserProfile.objects.create(username=username,password=password,email=email)
+                user1.save()
+                login(request,user1)
+                return render(request,'index.html')
+        else:
+            return render(request, 'register.html', {'msg': '用户名或密码错误', 'registerform': registerform})
+
 
 class UserInfoView(View):
     def get(self,request,*args,**kwargs):
         return render(request,'usercenter-info.html')
+
+
+class UserImgUploadView(View):
+    def post(self,request,*args,**kwargs):
+        image = ImageUploadForm(request.POST,request.FILES)
+        if image.is_valid():
+            request.user.save()
+
+            return render(request, 'usercenter-info.html')
+        else:
+            return render(request, 'usercenter-info.html')
 
 
 
@@ -78,3 +99,19 @@ class UserCourseView(View):
     def get(self,request,*args,**kwargs):
         return render(request,'usercenter-mycourse.html',{
         })
+
+class FavCourseView(View):
+    def get(self,request,*args,**kwargs):
+        userfavs = UserFavorite.objects.filter(user_id=request.user.id,fav_type=1)
+        if userfavs:
+            list = [course.fav_id for course in userfavs]
+            courses = Course.objects.filter(id__in = list)
+
+            return render(request,'usercenter-fav-course.html',{
+                'fav_course':courses,
+                'isexist':True
+            })
+        else:
+            return render(request,'usercenter-fav-course.html',{
+                'isexist': False
+            })
