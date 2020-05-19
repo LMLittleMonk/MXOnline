@@ -7,7 +7,10 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.hashers import make_password
 from apps.operations.models import UserFavorite
-from apps.courses.models import Course
+from apps.courses.models import Course,CourseOrg,Teacher
+
+
+
 
 def IndexView(request):
 
@@ -48,11 +51,13 @@ class LoginView(View):
 
 
 
+
 class LogoutView(View):
 
     def get(slef,request,*args,**kwargs):
         logout(request)
         return HttpResponseRedirect(reverse("index"))
+
 
 
 
@@ -78,9 +83,11 @@ class RegisterView(View):
             return render(request, 'register.html', {'msg': '用户名或密码错误', 'registerform': registerform})
 
 
+
 class UserInfoView(View):
     def get(self,request,*args,**kwargs):
         return render(request,'usercenter-info.html')
+
 
 
 class UserImgUploadView(View):
@@ -95,10 +102,12 @@ class UserImgUploadView(View):
 
 
 
+
 class UserCourseView(View):
     def get(self,request,*args,**kwargs):
         return render(request,'usercenter-mycourse.html',{
         })
+
 
 class FavCourseView(View):
     def get(self,request,*args,**kwargs):
@@ -115,3 +124,43 @@ class FavCourseView(View):
             return render(request,'usercenter-fav-course.html',{
                 'isexist': False
             })
+
+class FavOrgView(View):
+    def get(self,request,*args,**kwargs):
+        userfavs = UserFavorite.objects.filter(user_id=request.user.id,fav_type=2)
+        if userfavs:
+            list = [org.fav_id for org in userfavs]
+            orgs = CourseOrg.objects.filter(id__in = list)
+
+            return render(request,'usercenter-fav-org.html',{
+                'fav_orgs':orgs,
+                'isexist':True
+            })
+
+        else:
+
+            return render(request,'usercenter-fav-org.html',{
+                'isexist': False
+            })
+
+
+
+
+class FavTeacherView(View):
+    def get(self,request,*args,**kwargs):
+        userfavs = UserFavorite.objects.filter(user_id=request.user.id,fav_type=3)
+        if userfavs:
+            list = [teacher.fav_id for teacher in userfavs]
+            teachers = Teacher.objects.filter(id__in = list)
+
+            return render(request,'usercenter-fav-teacher.html',{
+                'fav_teachers':teachers,
+                'isexist':True
+            })
+
+        else:
+
+            return render(request,'usercenter-fav-teacher.html',{
+                'isexist': False
+            })
+

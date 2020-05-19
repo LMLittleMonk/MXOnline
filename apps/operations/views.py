@@ -82,6 +82,22 @@ class DeleteFavView(View):
         userfav.delete()
         return HttpResponseRedirect(reverse('user:favcourse'))
 
+
+
+
+class DeleteOrgView(View):
+    def get(self,request,fav_id,*args,**kwargs):
+        userfav = UserFavorite.objects.filter(fav_id=int(fav_id),fav_type=2,user_id=request.user.id)
+        userfav.delete()
+        return HttpResponseRedirect(reverse('user:favorg'))
+
+class DeleteTeacherView(View):
+    def get(self,request,fav_id,*args,**kwargs):
+        userfav = UserFavorite.objects.filter(fav_id=int(fav_id),fav_type=3,user_id=request.user.id)
+        userfav.delete()
+        return HttpResponseRedirect(reverse('user:favteacher'))
+
+
 def verify_code(request):
     #引入随机函数模块
     import random
