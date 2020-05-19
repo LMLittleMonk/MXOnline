@@ -74,6 +74,8 @@ class UserMessage(BaseModel):
         return self.message
 
 
+
+
 class UserCourse(BaseModel):
     user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, verbose_name="用户")
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="课程")

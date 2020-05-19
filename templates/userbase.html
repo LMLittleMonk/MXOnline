@@ -50,8 +50,8 @@
                         </div>
                     </div>
 
-                    <a href="usercenter-message.html">
-                        <div class="msg-num"><span id="MsgNum">0</span></div>
+                    <a href="{% url 'user:msg' %}">
+                        <div class="msg-num"><span id="MsgNum">{{count}}</span></div>
                     </a>
 
 
@@ -75,7 +75,7 @@
 {% endblock %}
 
 <section>
-
+<div class="wp list personal_list">
 
 
         {% block content %}

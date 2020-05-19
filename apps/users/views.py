@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.http import HttpResponse,HttpResponseRedirect
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.hashers import make_password
-from apps.operations.models import UserFavorite
+from apps.operations.models import UserFavorite,UserMessage
 from apps.courses.models import Course,CourseOrg,Teacher
 
 
@@ -86,7 +86,10 @@ class RegisterView(View):
 
 class UserInfoView(View):
     def get(self,request,*args,**kwargs):
-        return render(request,'usercenter-info.html')
+        count = UserMessage.objects.filter(user_id=request.user.id,has_read=0).count()
+        return render(request,'usercenter-info.html',{
+            'count':count
+        })
 
 
 
@@ -100,17 +103,16 @@ class UserImgUploadView(View):
         else:
             return render(request, 'usercenter-info.html')
 
-
-
-
 class UserCourseView(View):
     def get(self,request,*args,**kwargs):
+        count = UserMessage.objects.filter(user_id=request.user.id, has_read=0).count()
         return render(request,'usercenter-mycourse.html',{
+            'count':count
         })
-
 
 class FavCourseView(View):
     def get(self,request,*args,**kwargs):
+        count = UserMessage.objects.filter(user_id=request.user.id, has_read=0).count()
         userfavs = UserFavorite.objects.filter(user_id=request.user.id,fav_type=1)
         if userfavs:
             list = [course.fav_id for course in userfavs]
@@ -118,49 +120,93 @@ class FavCourseView(View):
 
             return render(request,'usercenter-fav-course.html',{
                 'fav_course':courses,
-                'isexist':True
+                'isexist':True,
+                'count':count
             })
         else:
             return render(request,'usercenter-fav-course.html',{
-                'isexist': False
+                'isexist': False,
+                'count': count
             })
 
 class FavOrgView(View):
     def get(self,request,*args,**kwargs):
         userfavs = UserFavorite.objects.filter(user_id=request.user.id,fav_type=2)
+        count = UserMessage.objects.filter(user_id=request.user.id, has_read=0).count()
         if userfavs:
             list = [org.fav_id for org in userfavs]
             orgs = CourseOrg.objects.filter(id__in = list)
 
             return render(request,'usercenter-fav-org.html',{
                 'fav_orgs':orgs,
-                'isexist':True
+                'isexist':True,
+                'count': count
             })
 
         else:
 
             return render(request,'usercenter-fav-org.html',{
-                'isexist': False
+                'isexist': False,
+                'count': count
             })
-
-
-
 
 class FavTeacherView(View):
     def get(self,request,*args,**kwargs):
         userfavs = UserFavorite.objects.filter(user_id=request.user.id,fav_type=3)
+        count = UserMessage.objects.filter(user_id=request.user.id, has_read=0).count()
         if userfavs:
             list = [teacher.fav_id for teacher in userfavs]
             teachers = Teacher.objects.filter(id__in = list)
 
             return render(request,'usercenter-fav-teacher.html',{
                 'fav_teachers':teachers,
-                'isexist':True
+                'isexist':True,
+                'count':count
             })
 
         else:
 
             return render(request,'usercenter-fav-teacher.html',{
-                'isexist': False
+                'isexist': False,
+                'count':count
             })
 
+class UserMsgView(View):
+    def get(self,request,*args,**kwargs):
+        msgs = UserMessage.objects.filter(user_id=request.user.id)
+        count = UserMessage.objects.filter(user_id=request.user.id, has_read=0).count()
+        newmsg=[]
+        if msgs:
+            for msg in msgs:
+                msg.has_read = 1
+                msg.save()
+                newmsg.append(msg)
+            return render(request,'usercenter-message.html',{
+                'isexist':True,
+                'msgs':newmsg,
+                'count':count
+            })
+        else:
+            return render(request, 'usercenter-message.html', {
+                'isexist': False,
+
+            })
+
+
+
+class UserChangeView(View):
+
+    def post(self,request,*args,**kwargs):
+        user = request.user
+
+        nick_name = request.POST.get("nick_name",'')
+        birthday = request.POST.get("birthday",'')
+        gender = request.POST.get("gender",'')
+        address = request.POST.get("address",'')
+
+        user.nick_name = nick_name
+        user.birthday = birthday
+        user.gender = gender
+        user.address =address
+        user.save()
+        return HttpResponseRedirect(reverse('user:homepage'))

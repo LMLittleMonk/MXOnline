@@ -16,14 +16,13 @@
 
 
 {% block content %}
- <div class="wp list personal_list">
         <div class="left">
             <ul>
                 <li class="active2"><a href="{% url 'user:detail' %}">个人资料</a></li>
                 <li class=""><a href="{% url 'user:mycourse' %}">我的课程</a></li>
                 <li><a href="{% url 'user:favcourse' %}">我的收藏</a></li>
                 <li>
-                    <a href="usercenter-message.html" style="position: relative;">
+                    <a href="{% url 'user:msg' %}" style="position: relative;">
                         我的消息
                     </a>
                 </li>
@@ -92,6 +91,7 @@
                             <input type="button" id="jsEditUserBtn" value="保存">
                         </li>
                     </ul>
+                {% csrf_token %}
                 </form>
             </div>
         </div>

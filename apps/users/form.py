@@ -17,3 +17,12 @@ class ImageUploadForm(forms.Form):
     class Meta:
         model = UserProfile
         fields = ['image']
+
+# class UserChangeForm(forms.ModelForm):
+#     nick_name = forms.CharField(required=True,max_length=20)
+#     birthday = forms.DateField(required=True)
+#     gender = forms.CharField(required=True)
+#     address = forms.CharField(required=True)
+#     class Meta:
+#         model = UserProfile
+#         fields = ['nick_name','birthday','gender','address']
