@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic import View
 from apps.courses.models import *
 from pure_pagination import Paginator, EmptyPage, PageNotAnInteger
-from apps.operations.models import UserFavorite
+from apps.operations.models import UserFavorite,CourseComments
 from django.contrib.auth.mixins import LoginRequiredMixin
 from apps.operations.models import UserCourse
 
@@ -98,4 +98,25 @@ class CourseLessonView(LoginRequiredMixin,View):
             'course':course,
             'fav_courses':fav_courses,
             'item':item
+        })
+
+class CourseCommentView(View):
+    login_url = '/login/'
+
+    def get(self, request, course_id, *args, **kwargs):
+        course = Course.objects.get(id=int(course_id))
+        comment = CourseComments.objects.filter(course=course)
+        user_courses = UserCourse.objects.filter(course=course)
+        user_ids = [user_course.user.id for user_course in user_courses]
+        all_courses = UserCourse.objects.filter(user_id__in=user_ids).exclude(id=course_id)
+        item = []
+        for all_course in all_courses:
+            item.append(all_course.course)
+
+        fav_courses = Course.objects.exclude(id=int(course_id)).order_by('-fav_nums')[:3]
+        return render(request, 'course-comment.html', {
+            'course': course,
+            'fav_courses': fav_courses,
+            'item': item,
+            'comments':comment
         })

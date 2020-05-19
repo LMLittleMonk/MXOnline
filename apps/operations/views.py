@@ -1,12 +1,14 @@
 from django.shortcuts import render
-from apps.operations.form import UserFavForm
+from apps.operations.form import UserFavForm,CommentForm
 from django.views import View
 from django.http import JsonResponse,HttpResponse,HttpResponseRedirect
-from apps.operations.models import UserFavorite
+from apps.operations.models import UserFavorite,CourseComments
 from apps.courses.models import Course,CourseOrg,Teacher
 from PIL import Image, ImageDraw, ImageFont
 from django.utils.six import BytesIO
 from django.urls import reverse
+from datetime import datetime
+
 
 class AddFavView(View):
     """
@@ -75,6 +77,34 @@ class AddFavView(View):
                  "msg": "参数错误"}
             )
 
+class AddComment(View):
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return JsonResponse({
+                "status":"fail",
+                "msg": "用户未登录"
+            })
+
+        add_comment = CommentForm(request.POST)
+        if add_comment.is_valid():
+            comments = add_comment.cleaned_data["comments"]
+            course_id = add_comment.cleaned_data["course"]
+            com = CourseComments()
+            com.course_id = course_id
+            com.comments =comments
+            com.user_id = request.user.id
+            com.add_time = datetime.now()
+            com.save()
+            return JsonResponse(
+                {"status": "success",
+                 "msg": "评论成功"}
+            )
+        else:
+            return JsonResponse(
+                {"status": "fail",
+                 "msg": "评论不符合规则"}
+            )
 
 class DeleteFavView(View):
     def get(self,request,fav_id,*args,**kwargs):
