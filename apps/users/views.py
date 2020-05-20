@@ -3,7 +3,7 @@ from django.views.generic.base import View
 from apps.users.models import *
 from apps.users.form import LoginForm,RegisterForm,ImageUploadForm
 from django.urls import reverse
-from django.http import HttpResponse,HttpResponseRedirect
+from django.http import HttpResponse,HttpResponseRedirect,JsonResponse
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.hashers import make_password
 from apps.operations.models import UserFavorite,UserMessage
@@ -99,7 +99,10 @@ class UserImgUploadView(View):
         if image.is_valid():
             request.user.save()
 
-            return render(request, 'usercenter-info.html')
+            return JsonResponse({
+                'status':'success',
+                'msg':'成功更换图片'
+            })
         else:
             return render(request, 'usercenter-info.html')
 

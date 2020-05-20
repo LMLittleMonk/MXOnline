@@ -2,7 +2,7 @@ from django.shortcuts import render
 from apps.operations.form import UserFavForm,CommentForm
 from django.views import View
 from django.http import JsonResponse,HttpResponse,HttpResponseRedirect
-from apps.operations.models import UserFavorite,CourseComments
+from apps.operations.models import UserFavorite,CourseComments,Banner
 from apps.courses.models import Course,CourseOrg,Teacher
 from PIL import Image, ImageDraw, ImageFont
 from django.utils.six import BytesIO
@@ -173,3 +173,22 @@ def verify_code(request):
 
 
 
+class IndexView(View):
+    def get(self,request,*args,**kwargs):
+        banners = Banner.objects.all().order_by('index')[:5]
+        banner_courses = Course.objects.filter(is_banner=True)[:2]
+        ids = [banner_course.id for banner_course in banner_courses]
+        course = []
+        courses = Course.objects.all()
+        for cou in courses:
+            if cou.id not in ids:
+                course.append(cou)
+        orgs = CourseOrg.objects.all()
+
+
+        return render(request,'index.html',{
+            'banners':banners,
+            'banner_courses':banner_courses,
+            'courses':course,
+            'orgs':orgs,
+        })

@@ -130,3 +130,41 @@
         </form>
     </div>
 {% endblock %}
+
+{% block custom_js %}
+<script type="text/javascript">
+    //添加评论
+    $(document).ready(function() {
+        $('#jsAvatarBtn').on('click', function () {
+            var image = $("#avatarUp").file()
+            if (image == "") {
+                alert("图片不存在")
+                return
+            }
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "{% url 'user:upload' %}",
+                data: { 'image': image},
+                async: true,
+                beforeSend: function (xhr, settings) {
+                    xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
+                },
+                success: function (data) {
+                    if (data.status == 'fail') {
+                        if (data.msg == '用户未登录') {
+                            window.location.href = "{% url 'login' %}";
+                        } else {
+                            alert(data.msg)
+                        }
+
+                    } else if (data.status == 'success') {
+                        window.location.reload();//刷新当前页面.
+                    }
+                },
+            });
+        });
+    });
+
+</script>
+{% endblock %}
