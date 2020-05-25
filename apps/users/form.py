@@ -18,11 +18,13 @@ class ImageUploadForm(forms.Form):
         model = UserProfile
         fields = ['image']
 
-# class UserChangeForm(forms.ModelForm):
-#     nick_name = forms.CharField(required=True,max_length=20)
-#     birthday = forms.DateField(required=True)
-#     gender = forms.CharField(required=True)
-#     address = forms.CharField(required=True)
-#     class Meta:
-#         model = UserProfile
-#         fields = ['nick_name','birthday','gender','address']
+class UserInfoForm(forms.ModelForm):
+    class Meta:
+        model=UserProfile
+        fields=['nick_name','gender','birthday','address','mobile']
+
+class PwdChangeForm(forms.ModelForm):
+    password1 = forms.CharField(required=True,min_length=6)
+    password2 = forms.CharField(required=True,min_length=6)
+
+

@@ -3,6 +3,8 @@ from apps.organizations.models import Teacher
 from django.views import View
 from pure_pagination import PageNotAnInteger,Paginator,EmptyPage
 from apps.operations.models import UserFavorite
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 # Create your views here.
 
 class TeacherListView(View):
@@ -53,3 +55,4 @@ class TeacherDetailView(View):
             'has_fav_org':has_fav_org,
             'has_fav_teacher':has_fav_teacher,
         })
+

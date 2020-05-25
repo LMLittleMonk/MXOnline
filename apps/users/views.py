@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic.base import View
 from apps.users.models import *
-from apps.users.form import LoginForm,RegisterForm,ImageUploadForm
+from apps.users.form import LoginForm,RegisterForm,ImageUploadForm,UserInfoForm,PwdChangeForm
 from django.urls import reverse
 from django.http import HttpResponse,HttpResponseRedirect,JsonResponse
 from django.contrib.auth import authenticate,login,logout
@@ -90,6 +90,25 @@ class UserInfoView(View):
         return render(request,'usercenter-info.html',{
             'count':count
         })
+    def post(self,request,*args,**kwargs):
+        changeform = UserInfoForm(request.POST)
+        if changeform.is_valid():
+
+            user = request.user
+            nick_name = changeform.cleaned_data["nick_name"]
+            gender = changeform.cleaned_data["gender"]
+            birthday = changeform.cleaned_data["birthday"]
+            mobile = changeform.cleaned_data["mobile"]
+            address = changeform.cleaned_data["address"]
+            user.nick_name = nick_name
+            user.gender = gender
+            user.birthday = birthday
+            user.mobile = mobile
+            user.address = address
+            user.save()
+            return HttpResponseRedirect(reverse('user:detail'))
+        else:
+            return HttpResponseRedirect(reverse('user:detail'))
 
 
 
@@ -97,14 +116,19 @@ class UserImgUploadView(View):
     def post(self,request,*args,**kwargs):
         image = ImageUploadForm(request.POST,request.FILES)
         if image.is_valid():
-            request.user.save()
+            user = request.user
+            user.image = image
+            user.save()
 
             return JsonResponse({
-                'status':'success',
-                'msg':'成功更换图片'
+                'status': 'success',
+                'msg':'成功'
             })
         else:
-            return render(request, 'usercenter-info.html')
+            return JsonResponse({
+                'status': 'fail',
+                'msg': '成功'
+            })
 
 class UserCourseView(View):
     def get(self,request,*args,**kwargs):
@@ -195,21 +219,26 @@ class UserMsgView(View):
 
             })
 
-
-
-class UserChangeView(View):
-
+class UserChangePwdView(View):
     def post(self,request,*args,**kwargs):
-        user = request.user
+        pwdchange = PwdChangeForm(request.POST)
+        if pwdchange.is_valid():
+            pw1 = pwdchange.cleaned_data["password1"]
+            pw2 = pwdchange.cleaned_data["password2"]
+            if pw1 != pw2:
+                return JsonResponse({
+                    "status": "success",
+                    "msg": "密码不一致"
 
-        nick_name = request.POST.get("nick_name",'')
-        birthday = request.POST.get("birthday",'')
-        gender = request.POST.get("gender",'')
-        address = request.POST.get("address",'')
-
-        user.nick_name = nick_name
-        user.birthday = birthday
-        user.gender = gender
-        user.address =address
-        user.save()
-        return HttpResponseRedirect(reverse('user:homepage'))
+                })
+            user = request.user
+            pwd = make_password(pw1)
+            user.password = pwd
+            user.save()
+            return JsonResponse({
+                'status':'success'
+            })
+        else:
+            return JsonResponse({
+                'status': 'fail'
+            })

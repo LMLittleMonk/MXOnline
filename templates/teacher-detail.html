@@ -25,7 +25,8 @@
                                     <img width="100" height="100" src="{{ teacher.image.url }}"/>
                                 </div>
                                 <div class="btn">
-                                <span class="fl btn1 collectionbtn" style="" id="jsLeftBtn">
+
+                                <span class="{% if has_fav_teacher  %}fl btn3 collectionbtn{% else %}fl btn1 collectionbtn{% endif %}" id="jsLeftBtn">
                                      {% if has_fav_teacher  %}已收藏{% else %}收藏{% endif %}
                                 </span>
                                     <span class="fr btn2 shareBtn bdsharebuttonbox"
@@ -161,6 +162,7 @@
                         }
                     } else if (data.status == 'success') {
                         current_elem.text(data.msg)
+                        window.location.reload();
                     }
                 }
             })

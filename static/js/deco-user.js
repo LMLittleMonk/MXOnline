@@ -175,7 +175,7 @@ $(function(){
             cache: false,
             type: "POST",
             dataType:'json',
-            url:"/users/update/pwd/",
+            url:"/user/update/pwd/",
             data:$('#jsResetPwdForm').serialize(),
             async: true,
             success: function(data) {
@@ -256,7 +256,7 @@ $(function(){
             cache: false,
             type: 'post',
             dataType:'json',
-            url:"/users/info/",
+            url:"/user/detail/",
             data:$jsEditUserForm.serialize(),
             async: true,
             beforeSend:function(XMLHttpRequest){

@@ -6,7 +6,7 @@
         <div class="wp">
             <ul class="crumbs">
                 <li><a href="{% url 'index' %}">首页</a>></li>
-                <li><a href="/user/home/">个人中心</a>></li>
+                <li><a href="{% url 'user:detail' %}">个人中心</a>></li>
                 <li>个人信息</li>
             </ul>
         </div>
@@ -55,28 +55,20 @@
                         <a class="button btn-green btn-w100" id="jsUserResetPwd" style="margin:80px auto;width:100px;">修改密码</a>
                     </div>
                 </div>
+
                 <form class="perinform" id="jsEditUserForm" autocomplete="off">
                     <ul class="right">
                         <li>昵&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;称：
-                            <input type="text" name="nick_name" id="nick_name" value="{{user.nick_name}}" maxlength="10">
+                            <input type="text" name="nick_name" id="nick_name" value="{{user.nick_name|default_if_none:''}}" maxlength="10">
                             <i class="error-tips"></i>
                         </li>
                         <li>生&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;日：
-                            <input type="text" id="birth_day" name="birday" value="{{ user.birthday }}" readonly="readonly"/>
+                            <input type="text" id="birth_day" name="birthday" value="{{ user.birthday|default_if_none:''|date:'Y-m-d' }}" readonly="readonly"/>
                             <i class="error-tips"></i>
                         </li>
                         <li>性&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;别：
-                            {% if  user.get_gender_display  == '男' %}
-                            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="gender"
-                                                                        value="male" checked="checked">男</label>
-                            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="gender" value="female"
-                                                                              >女</label>
-                            {% else %}
-                            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="gender"
-                                                                        value="male" checked="">男</label>
-                            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="gender" value="female"
-                                                                              checked="checked">女</label>
-                            {% endif %}
+                           	<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="gender" value="male"  {% if request.user.gender == 'male' %}checked="checked"{% endif %}>男</label>
+							<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="gender" value="female" {% if request.user.gender == 'female' %}checked="checked"{% endif %}>女</label>
                         </li>
                         <li class="p_infor_city">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;址：
                             <input type="text" name="address" id="address" placeholder="请输入你的地址" value="{{user.address}}"
@@ -93,6 +85,7 @@
                     </ul>
                 {% csrf_token %}
                 </form>
+
             </div>
         </div>
     </div>
@@ -101,70 +94,8 @@
 
 
 <!--手机修改-->
-{% block change %}
-    <div class="dialogbox changephone changephone1" id="jsChangePhoneDialog" style="display: none; margin-top: 81px;">
-        <h1>修改手机号码</h1>
-        <div class="close jsCloseDialog"><img src="/static/images/dig_close.png"></div>
-        <p>请输入新的手机号码</p>
-        <form id="jsChangePhoneForm" autocomplete="off">
-            <div class="box">
-                <input class="fl change_mobile" type="text" id="jsChangePhone" name="mobile" autocomplete="off"
-                       placeholder="输入重新绑定的手机号码">
-            </div>
-            <div class="box">
-                <input autocomplete="off" class="form-control-captcha find-password-captcha"
-                       id="find-password-captcha_1" name="captcha_1" placeholder="请输入验证码" type="text">
-                <input class="form-control-captcha find-password-captcha" id="find-password-captcha_0" name="captcha_0"
-                       placeholder="请输入验证码" type="hidden" value="5de5a9903eced0b941df9478f26896879956ca18">
-                &nbsp;<img src="./个人资料_files/saved_resource" alt="captcha" class="captcha">
-            </div>
-            <div class="box">
-                <input class="fl" type="text" id="jsChangePhoneCode" name="mobile_code" placeholder="输入手机验证码">
-                <input class="getcode getting" type="button" id="jsChangePhoneCodeBtn" value="获取验证码">
-            </div>
-            <div class="error btns" id="jsChangePhoneTips" style="display: none;"></div>
-            <div class="button">
-                <input type="button" value="完成" id="jsChangePhoneBtn">
-            </div>
 
-        </form>
-    </div>
-{% endblock %}
 
 {% block custom_js %}
-<script type="text/javascript">
-    //添加评论
-    $(document).ready(function() {
-        $('#jsAvatarBtn').on('click', function () {
-            var image = $("#avatarUp").file()
-            if (image == "") {
-                alert("图片不存在")
-                return
-            }
-            $.ajax({
-                cache: false,
-                type: "POST",
-                url: "{% url 'user:upload' %}",
-                data: { 'image': image},
-                async: true,
-                beforeSend: function (xhr, settings) {
-                    xhr.setRequestHeader("X-CSRFToken", '{{ csrf_token }}');
-                },
-                success: function (data) {
-                    if (data.status == 'fail') {
-                        if (data.msg == '用户未登录') {
-                            window.location.href = "{% url 'login' %}";
-                        } else {
-                            alert(data.msg)
-                        }
 
-                    } else if (data.status == 'success') {
-                        window.location.reload();//刷新当前页面.
-                    }
-                },
-            });
-        });
-    });
-
-</script>
 {% endblock %}

@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^list/$',TeacherListView.as_view(),name='list'),
     url(r'^detail(?P<id>\d+)/$', TeacherDetailView.as_view(), name='detail'),
 
+
 ]
